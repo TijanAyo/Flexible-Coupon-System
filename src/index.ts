@@ -15,7 +15,7 @@ app.use(express.urlencoded({extended: false}));
 app.use("/api/v1", routes);
 
 app.get("/", (_req: Request, res: Response) => {
-    return res.status(200).send("Flexible Coupon System v1.0.0");
+    return res.status(200).json({ message: "Flexible Coupon System v1.0.0" });
 });
 
 export default app;
