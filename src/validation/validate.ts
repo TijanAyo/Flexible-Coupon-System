@@ -16,12 +16,17 @@ export const addItemSchema = joi.object({
 
 export const addCouponSchema = joi.object({
     coupon_name: joi.string().max(20).required(),
-    price: joi.number().valid(
+    discount_type: joi.number().valid(
         DiscountType.FIXED10,
         DiscountType.PERCENT10,
         DiscountType.MIXED10,
         DiscountType.REJECTED10
     ).required(),
+
+});
+
+export const applyCouponSchema = joi.object({
+    coupon_name: joi.string().max(20).required(),
     CartId: joi.string().required(),
 });
 

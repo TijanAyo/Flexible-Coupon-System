@@ -1,18 +1,28 @@
+import { Request, Response } from "express";
+import CouponService from "../service/coupon.service";
+
+const couponService: CouponService = new CouponService();
+
 class CouponController {
 
-    public async applyCoupon(payload: any) {
+    public async applyCoupon(req: Request, res: Response) {
         try {
-            // TODO: User applyCoupon service
+            const response = await couponService.applyCoupon(req.body);
+            return res.status(201).json(response);
         } catch (err:any) {
-            // TODO: Implement error handler
+            console.error(err.message);
+            return res.status(500).json({ message: err.message });
         }
     }
 
-    public async addNewCoupon(payload: any) {
+    public async addNewCoupon(req: Request, res: Response) {
         try {
-            // TODO: User addNewCoupon service
+            const response = await couponService.addNewCoupon(req.body);
+            return res.status(201).json(response);
         } catch(err:any) {
             // TODO: Implement error handler
+            console.error(err.message);
+            return res.status(500).json({ message: err.message });
         }
     }
 }

@@ -8,9 +8,14 @@ export interface addItemPayload {
 
 export interface addCouponPayload {
     coupon_name: string;
-    price: DiscountType;
+    discount_type: DiscountType;
 }
 
 export interface createCartPayload {
     cart_owner: string;
+}
+
+export interface applyCouponPayload {
+    coupon_name: string;
+    CartId: string;
 }
