@@ -58,3 +58,5 @@ The API should now be running locally at http://localhost:4070.
 
 **API Documentation**: [Flexible Coupon System API Documentation](https://documenter.getpostman.com/view/19118409/2s9Y5eMzRD)
 
+**Note:**
+Due to the use of a free-tier server, the server may enter a sleep mode after 15 minutes of inactivity. As a result, your initial request may experience a slight delay. Subsequent requests will be processed promptly.
