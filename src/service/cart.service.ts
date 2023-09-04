@@ -11,7 +11,7 @@ class CartService {
      * @desc User can pick up(create) a new cart
      * @param payload
      */
-    public async pickUpACart(payload: createCartPayload): Promise<{message: string}> {
+    public async pickUpACart(payload: createCartPayload) {
         try {
             await createCartSchema.validateAsync(payload);
             const newCart = await Cart.create({
@@ -24,7 +24,7 @@ class CartService {
                 });
             }
             await newCart.save();
-            return { message: "Cart created successfully"};
+            return { message: "Cart created successfully", newCart };
         } catch(err:any) {
             logger.error(err.message);
             if (err instanceof ValidationError) {
