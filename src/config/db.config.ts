@@ -12,8 +12,8 @@ const DB_HOST: string = process.env.DB_HOST || '';
 // TODO: Change to production database
 export const sequelize: Sequelize = new Sequelize(DB_NAME, DB_USERNAME, DB_PASSWORD, {
     host: DB_HOST,
-    dialect: 'mysql',
-    port: 3306
+    dialect: 'postgres',
+    port: 5432
 });
 
 async function main(): Promise<void> {
