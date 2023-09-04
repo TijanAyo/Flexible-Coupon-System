@@ -4,13 +4,13 @@
   "description": "",
   "main": "./src/server.ts",
   "scripts": {
-    "start": "node ./src/server.js",
+    "start": "node ./dist/server.js",
     "start:dev": "nodemon ./src/server.ts",
     "build": "tsc",
     "postinstall": "tsc"
   },
   "keywords": [],
-  "author": "",
+  "author": "TijanAyo <ayomidetijani6@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.3.1",
