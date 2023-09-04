@@ -5,6 +5,10 @@ import {Cart, Item} from "../models/schema.model";
 const defaultCartId: string = process.env.CARTID || '';
 
 class CartService {
+    /**
+     * @desc User can pick up(create) a new cart
+     * @param payload
+     */
     public async pickUpACart(payload: createCartPayload) {
         try {
             await createCartSchema.validateAsync(payload);
@@ -21,6 +25,9 @@ class CartService {
         }
     }
 
+    /**
+     * @desc User can view cart information ( Cart Owner, items in cart and total )
+     */
     public async getCartInfo() {
         try {
             const cart = await Cart.findOne({
@@ -37,10 +44,6 @@ class CartService {
                 attributes: {
                     exclude: ['CartId','createdAt', 'updatedAt']
                 }
-            });
-            const priceTotal: number = items.reduce((sum: number, item:any) => sum + item.price, 0);
-            await Cart.update({ total: priceTotal }, {
-                where: { id: defaultCartId }
             });
             return { cart, items };
         } catch(err:any) {

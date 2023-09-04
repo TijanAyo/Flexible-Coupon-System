@@ -4,6 +4,10 @@ import {Item, Cart} from "../models/schema.model";
 
 class ItemService {
 
+    /**
+     * @desc Add item to cart
+     * @param payload
+     */
     public async addItemToCart(payload: addItemPayload) {
         try {
             await addItemSchema.validateAsync(payload);
@@ -17,26 +21,16 @@ class ItemService {
             if (!newItem) {
                 return { message: "Something went wrong"};
             }
+            const items = await Item.findAll({ where: { CartId: payload.CartId }});
+            const priceTotal: number = items.reduce((sum: number, item:any) => sum + item.price, 0);
+            // Update the cart with the new total
+            await Cart.update({ total: priceTotal }, {
+                where: { id: payload.CartId },
+            });
             return { message: "Item added to cart", data: newItem };
         } catch(err:any) {
             // TODO: Throw appropriate error message
             console.error(err.message);
-        }
-    }
-
-    public async showItemsInCart(cartId: string) {
-        try {
-            const isCartValid = await Cart.findByPk(cartId);
-            if (!isCartValid) {
-                return { message: `Cart with ID: ${cartId} was not found`};
-            }
-            const listItemInCart = await Cart.findOne({
-                where: { id: cartId }
-            });
-            return { data: listItemInCart };
-        } catch(err:any) {
-            // TODO: Throw appropriate error message\
-            console.error("err.message");
         }
     }
 }

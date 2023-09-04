@@ -1,9 +1,13 @@
 import {addCouponPayload, applyCouponPayload} from "../interface/interface";
 import {addCouponSchema, applyCouponSchema, DiscountType} from "../validation/validate";
-import {Cart, Coupon} from "../models/schema.model";
+import {Cart, Coupon, Item} from "../models/schema.model";
 
 class CouponService {
 
+    /**
+     * @desc User can apply coupon to Cart
+     * @param payload
+     */
     public async applyCoupon(payload: applyCouponPayload) {
         try {
             await applyCouponSchema.validateAsync(payload);
@@ -24,6 +28,12 @@ class CouponService {
                 return { message: "CartId is not valid, check input and try again" };
             }
             const cartTotal = cart.dataValues.total;
+            const itemsAndCount = await Item.findAndCountAll({
+                where: { CartId: payload.CartId },
+            });
+            const itemsInCart: number = itemsAndCount.count;
+
+            console.log("Items in cart", itemsInCart);
 
             let discountAmount: string = "";
             let discount: number = 0;
@@ -31,17 +41,21 @@ class CouponService {
 
             // Apply different discounts based on coupon types
             switch (payload.coupon_name) {
+
                 case DiscountType.FIXED10:
-                    discountAmount = "%10";
-                    if (cartTotal < 50) {
-                        return { message: "Can't apply this coupon on cart... total price should be above $50" };
+                    discountAmount = "$10";
+                    if (cartTotal < 50 || itemsInCart < 1) {
+                        return {
+                            message: "Can't apply this coupon on cart... total price should be above $50 and should include " +
+                                "more than one item."
+                        };
                     }
                     discount = 10;
                     break;
 
                 case DiscountType.PERCENT10:
                     discountAmount = "%10";
-                    if (cartTotal < 100) {
+                    if (cartTotal < 100 || itemsInCart < 2) {
                         return { message: "Can't apply this coupon on cart... total price should be above $100" };
                     }
                     discount = (cartTotal * 10) / 100;
@@ -49,7 +63,7 @@ class CouponService {
 
                 case DiscountType.MIXED10:
                     discountAmount = "%10";
-                    if (cartTotal < 200) {
+                    if (cartTotal < 200 || itemsInCart < 3) {
                         return { message: "Can't apply this coupon on cart... total price should be above $200" };
                     }
                     discount = (cartTotal * 10) / 100;
@@ -81,7 +95,10 @@ class CouponService {
         }
     }
 
-
+    /**
+     * @desc Admin feature: Admin users can create new coupon
+     * @param payload
+     */
     public async addNewCoupon(payload: addCouponPayload) {
         try {
             await addCouponSchema.validateAsync(payload);
@@ -97,7 +114,6 @@ class CouponService {
             // TODO: Throw appropriate error message
             console.log(err.message);
         }
-
     }
 }
 

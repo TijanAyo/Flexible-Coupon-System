@@ -15,19 +15,6 @@ class ItemController {
             return res.status(500).json({error: err.message});
         }
     }
-
-    public async viewCart(req: Request, res: Response) {
-        try {
-            const { cartId } = req.params;
-            const response = await itemService.showItemsInCart(cartId);
-            return res.status(201).json(response);
-        } catch(err:any) {
-            // TODO: Implement error handler
-            console.error(err.message);
-            return res.status(500).json({error: err.message});
-        }
-    }
-
 }
 
 export default ItemController;

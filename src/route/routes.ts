@@ -10,7 +10,6 @@ const couponController: CouponController = new CouponController();
 const router: Router = express.Router();
 
 router.get("/cart", cartController.getCartInfo);
-router.get("/cart/:cartId", itemController.viewCart);
 router.post("/cart/new", cartController.grabACart);
 router.post("/item/new", itemController.addItemToCart);
 router.post("/coupon", couponController.applyCoupon);
