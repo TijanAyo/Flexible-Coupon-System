@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
 import CouponService from "../service/coupon.service";
+import CustomErrorHandler from "../helper/custom-error-handler";
 
 const couponService: CouponService = new CouponService();
+const customErrorHandler: CustomErrorHandler = new CustomErrorHandler();
 
 class CouponController {
 
@@ -10,8 +12,7 @@ class CouponController {
             const response = await couponService.applyCoupon(req.body);
             return res.status(201).json(response);
         } catch (err:any) {
-            console.error(err.message);
-            return res.status(500).json({ message: err.message });
+            return await customErrorHandler.handleCustomError(err, res);
         }
     }
 
@@ -20,9 +21,7 @@ class CouponController {
             const response = await couponService.addNewCoupon(req.body);
             return res.status(201).json(response);
         } catch(err:any) {
-            // TODO: Implement error handler
-            console.error(err.message);
-            return res.status(500).json({ message: err.message });
+            return await customErrorHandler.handleCustomError(err, res);
         }
     }
 }

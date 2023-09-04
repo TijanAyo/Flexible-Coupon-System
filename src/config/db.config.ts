@@ -1,5 +1,6 @@
 import { Sequelize } from "sequelize";
 import * as dotenv from "dotenv";
+import {logger} from "../helper";
 
 dotenv.config();
 
@@ -18,13 +19,12 @@ export const sequelize: Sequelize = new Sequelize(DB_NAME, DB_USERNAME, DB_PASSW
 async function main(): Promise<void> {
     try {
         await sequelize.authenticate();
-        console.info('Connection has been established successfully.');
+        logger.info('Connection has been established successfully.');
 
         await sequelize.sync();
-        console.info('Database synced');
+        logger.info('Database synced');
     } catch (err:any) {
-        // TODO: Use logger package
-        console.error("Error:", err);
+        logger.error("Error:", err);
     }
 }
 

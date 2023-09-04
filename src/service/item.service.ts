@@ -1,6 +1,8 @@
 import {addItemPayload} from "../interface/interface";
 import {addItemSchema} from "../validation/validate";
-import {Item, Cart} from "../models/schema.model";
+import {Cart, Item} from "../models/schema.model";
+import {BadRequestException, Httpcode, logger, ValidationException} from "../helper";
+import {ValidationError} from "joi";
 
 class ItemService {
 
@@ -19,18 +21,26 @@ class ItemService {
                 CartId: payload.CartId,
             });
             if (!newItem) {
-                return { message: "Something went wrong"};
+                throw new BadRequestException({
+                    httpCode: Httpcode.BAD_REQUEST,
+                    description: "An issue occurred while adding item to cart. Kindly try again in 2 minute"
+                });
             }
             const items = await Item.findAll({ where: { CartId: payload.CartId }});
             const priceTotal: number = items.reduce((sum: number, item:any) => sum + item.price, 0);
-            // Update the cart with the new total
             await Cart.update({ total: priceTotal }, {
                 where: { id: payload.CartId },
             });
             return { message: "Item added to cart", data: newItem };
         } catch(err:any) {
-            // TODO: Throw appropriate error message
-            console.error(err.message);
+            logger.error(err.message);
+            if (err instanceof ValidationError) {
+                throw new ValidationException({
+                    httpCode: Httpcode.VALIDATION_ERROR,
+                    description: err.details[0].message
+                });
+            }
+            throw err;
         }
     }
 }

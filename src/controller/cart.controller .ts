@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
 import CartService from "../service/cart.service";
+import CustomErrorHandler from "../helper/custom-error-handler";
 
 const cartService: CartService = new CartService();
+const customErrorHandler: CustomErrorHandler = new CustomErrorHandler();
 
 class ItemController {
 
@@ -10,8 +12,7 @@ class ItemController {
             const response = await cartService.pickUpACart(req.body);
             return res.status(201).json(response);
         } catch(err:any) {
-            // TODO: Implement error handler
-            return res.status(500).json({ error: err.message });
+            return await customErrorHandler.handleCustomError(err, res);
         }
 
     }
@@ -20,8 +21,7 @@ class ItemController {
             const response = await cartService.getCartInfo();
             return res.status(201).json(response);
         } catch(err:any) {
-            // TODO: Implement error handler
-            return res.status(500).json({ error: err.message });
+            return await customErrorHandler.handleCustomError(err, res);
         }
 
     }
