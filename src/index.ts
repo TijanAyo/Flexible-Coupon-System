@@ -12,7 +12,7 @@ app.use(morgan('dev'));
 app.use(express.urlencoded({extended: false}));
 
 // Route
-app.use("/api/v1", routes);
+app.use("/", routes);
 
 app.get("/", (_req: Request, res: Response) => {
     return res.status(200).json({ message: "Flexible Coupon System v1.0.0" });
