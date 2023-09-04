@@ -1,30 +1,34 @@
 import { DataTypes} from "sequelize";
 import { sequelize} from "../config/db.config";
 
-const Cart = sequelize.define('Cart', {
+const Cart= sequelize.define('Cart', {
     id: {
         type : DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true
     },
-    image: {
+    cart_owner: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    title: {
-        type: DataTypes.STRING,
-        allowNull: false
+    total: {
+        type: DataTypes.INTEGER
+    }
+});
+
+const Item = sequelize.define('Item', {
+    id: {
+        type : DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true
     },
-    description: {
-        type: DataTypes.TEXT,
+    name: {
+        type: DataTypes.STRING,
         allowNull: false
     },
     price: {
         type: DataTypes.INTEGER,
         allowNull: false
-    },
-    total: {
-        type: DataTypes.INTEGER
     }
 });
 
@@ -34,18 +38,23 @@ const Coupon = sequelize.define('Coupon', {
        defaultValue: DataTypes.UUIDV4,
        primaryKey: true
    },
-    name: {
+    coupon_name: {
        type: DataTypes.STRING,
         allowNull: false
     },
-    discountType: {
+    discount_type: {
         type: DataTypes.ENUM('FIXED10', 'PERCENT10', 'MIXED10', 'REJECTED10'),
         allowNull: false,
     },
 });
 
 // Association
-Cart.hasMany(Coupon);
+Cart.hasMany(Item, {
+    foreignKey: {
+        allowNull: false
+    }
+})
+Item.belongsTo(Cart);
 Coupon.belongsTo(Cart);
 
-export { Cart, Coupon};
+export { Cart, Item, Coupon };
