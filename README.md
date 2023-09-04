@@ -27,7 +27,6 @@ Follow these steps to set up the Flexible Coupon System API on your local machin
    ```
 4. Create a .env file in the project root directory and set your environment variables
 
-
 5. Start development server:
     ```bash 
    npm run start:dev
